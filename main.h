@@ -1,5 +1,7 @@
-#define CONVERT_LOWERCASE   1
-#define CONVERT_UNSIGNED    2
+#ifndef MAIN_H
+#define MAIN_H
+#ifndef CONVERT_LOWERCASE 1
+#define CONVERT_UNSIGNED 2
 
 /**
  * struct parameters - parameters struct
