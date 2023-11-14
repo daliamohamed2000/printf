@@ -1,3 +1,6 @@
+#ifndef MAIN_H
+#define MAIN_H
+
 #ifndef _PRINTF_H
 #define _PRINTF_H
 
@@ -6,6 +9,7 @@
 #include <unistd.h>
 #include <limits.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define OUTPUT_BUF_SIZE 1024
 #define BUF_FLUSH -1
