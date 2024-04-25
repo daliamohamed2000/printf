@@ -1,130 +1,66 @@
 #include "main.h"
 
 /**
- * _isdigit - checks if character is digit
- * @c: character to check
- *
- * Return: 1 if digit, 0 otherwise
+ * print_number - prints a number send to this function
+ * @args: List of arguments
+ * Return: The number of arguments printed
  */
-int _isdigit(int c)
+int print_number(va_list args)
 {
-	return (c >= '0' && c <= '9');
-}
+	int n;
+	int div;
+	int len;
+	unsigned int num;
 
-/**
- * _strlen - returns a length of a string
- * @s: the string to be checked
- *
- * Return: integer length of string
- */
-int _strlen(char *s)
-{
-	int i = 0;
+	n  = va_arg(args, int);
+	div = 1;
+	len = 0;
 
-	while (*s++)
-		i++;
-	return (i);
-}
-
-/**
- * print_number - prints a number with options
- * @str: the base number as a string
- * @params: the parameters struct
- *
- * Return: chars printed
- */
-int print_number(char *str, params_t *params)
-{
-	unsigned int i = _strlen(str);
-	int neg = (!params->unsign && *str == '-');
-
-	if (!params->precision && *str == '0' && !str[1])
-		str = "";
-	if (neg)
+	if (n < 0)
 	{
-		str++;
-		i--;
+		len += _write_char('-');
+		num = n * -1;
 	}
-	if (params->precision != UINT_MAX)
-		while (i++ < params->precision)
-			*--str = '0';
-	if (neg)
-		*--str = '-';
-
-	if (!params->minus_flag)
-		return (print_number_right_shift(str, params));
 	else
-		return (print_number_left_shift(str, params));
+		num = n;
+
+	for (; num / div > 9; )
+		div *= 10;
+
+	for (; div != 0; )
+	{
+		len += _write_char('0' + num / div);
+		num %= div;
+		div /= 10;
+	}
+
+	return (len);
 }
-
 /**
- * print_number_right_shift - prints a number with options
- * @str: the base number as a string
- * @params: the parameters struct
- *
- * Return: chars printed
+ * print_unsgined_number - Prints an unsigned number
+ * @n: unsigned integer to be printed
+ * Return: The amount of numbers printed
  */
-int print_number_right_shift(char *str, params_t *params)
+int print_unsgined_number(unsigned int n)
 {
-	unsigned int n = 0, neg, neg2, i = _strlen(str);
-	char pad_char = ' ';
+	int div;
+	int len;
+	unsigned int num;
 
-	if (params->zero_flag && !params->minus_flag)
-		pad_char = '0';
-	neg = neg2 = (!params->unsign && *str == '-');
-	if (neg && i < params->width && pad_char == '0' && !params->minus_flag)
-		str++;
-	else
-		neg = 0;
-	if ((params->plus_flag && !neg2) ||
-			(!params->plus_flag && params->space_flag && !neg2))
-		i++;
-	if (neg && pad_char == '0')
-		n += _putchar('-');
-	if (params->plus_flag && !neg2 && pad_char == '0' && !params->unsign)
-		n += _putchar('+');
-	else if (!params->plus_flag && params->space_flag && !neg2 &&
-			!params->unsign && params->zero_flag)
-		n += _putchar(' ');
-	while (i++ < params->width)
-		n += _putchar(pad_char);
-	if (neg && pad_char == ' ')
-		n += _putchar('-');
-	if (params->plus_flag && !neg2 && pad_char == ' ' && !params->unsign)
-		n += _putchar('+');
-	else if (!params->plus_flag && params->space_flag && !neg2 &&
-			!params->unsign && !params->zero_flag)
-		n += _putchar(' ');
-	 n += _puts(str);
-	return (n);
-}
+	div = 1;
+	len = 0;
 
-/**
- * print_number_left_shift - prints a number with options
- * @str: the base number as a string
- * @params: the parameters struct
- *
- * Return: chars printed
- */
-int print_number_left_shift(char *str, params_t *params)
-{
-	unsigned int n = 0, neg, neg2, i = _strlen(str);
-	char pad_char = ' ';
+	num = n;
 
-	if (params->zero_flag && !params->minus_flag)
-		pad_char = '0';
-	neg = neg2 = (!params->unsign && *str == '-');
-	if (neg && i < params->width && pad_char == '0' && !params->minus_flag)
-		str++;
-	else
-		neg = 0;
+	for (; num / div > 9; )
+		div *= 10;
 
-	if (params->plus_flag && !neg2 && !params->unsign)
-		n += _putchar('+'), i++;
-	else if (params->space_flag && !neg2 && !params->unsign)
-		n += _putchar(' '), i++;
-	n += _puts(str);
-	while (i++ < params->width)
-		n += _putchar(pad_char);
-	return (n);
+	for (; div != 0; )
+	{
+		len += _write_char('0' + num / div);
+		num %= div;
+		div /= 10;
+	}
+
+	return (len);
 }
